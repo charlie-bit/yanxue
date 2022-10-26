@@ -1,11 +1,7 @@
 package log
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 var (
@@ -95,12 +91,12 @@ type DingMarkdown struct {
 }
 
 func Ding(template string, args ...interface{}) {
-	var d DingMarkdown
-	d.Msgtype = "text"
-	d.Text.Context = fmt.Sprintf("err : "+template, args)
-
-	buf, _ := json.Marshal(d)
-
-	_, err := http.DefaultClient.Post("https://oapi.dingtalk.com/robot/send?access_token=3325c63def69133725f88bafc172a60b2e5a1a0e8ae660d1bc446c8c559acb69", "application/json", bytes.NewBuffer(buf))
-	fmt.Println(err)
+	//var d DingMarkdown
+	//d.Msgtype = "text"
+	//d.Text.Context = fmt.Sprintf("[err]"+template, args)
+	//
+	//buf, _ := json.Marshal(d)
+	//
+	//_, err := http.DefaultClient.Post("https://oapi.dingtalk.com/robot/send?access_token=3325c63def69133725f88bafc172a60b2e5a1a0e8ae660d1bc446c8c559acb69", "application/json", bytes.NewBuffer(buf))
+	//fmt.Println(err)
 }
