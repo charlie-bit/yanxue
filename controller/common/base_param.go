@@ -49,6 +49,6 @@ func (SuperController) QueryLimitOffset(c *gin.Context) (dsl *BaseParam, err err
 	if dsl.Offset != constant.DefaultOffset {
 		dsl.Offset = dsl.Offset + 1
 	}
-	
+
 	return dsl, nil
 }
