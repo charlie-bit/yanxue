@@ -1,0 +1,29 @@
+Name := yanxue
+VERSION ?= $(shell git describe --tags --always || git rev-parse --short HEAD)
+BUILD_TIME ?= $(shell date +%Y-%m-%dT%T%z)
+
+GO ?= go
+
+# make -f ./MakeFile -C . lint
+.PHONY: lint
+lint:
+	golangci-lint run  --skip-dirs testsl
+
+# make -f ./MakeFile -C . build
+.PHONY: build
+build:
+	$(eval LDFLAGS := -X 'main.Version=$(VERSION)' -X 'main.BuildTime=$(BUILD_TIME)')
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -ldflags '-s -w $(LDFLAGS)' -o  bin/api cmd/api/main.go
+
+# make -f ./MakeFile -C . docs
+.PHONY: docs
+docs:
+	@hash swag 2>&- || $(GO) get github.com/swaggo/swag/cmd/swag@v1.7.6
+	rm -rf docs
+	swag init -g cmd/api/main.go
+
+# make -f ./MakeFile -C . dev
+.PHONY: dev
+dev:
+	$(eval LDFLAGS := -X 'main.Version=$(VERSION)' -X 'main.BuildTime=$(BUILD_TIME)')
+	go build -v -ldflags '-s -w $(LDFLAGS)' -o  bin/api cmd/api/main.go

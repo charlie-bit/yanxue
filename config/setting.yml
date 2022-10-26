@@ -1,0 +1,32 @@
+default: &default
+  debug: true
+
+  # Inner Http status address
+  addr: ":8000"
+  health_uri: "/health"
+
+  db:
+    mysql:
+      dsn: "admin:pass4u@tcp(127.0.0.1:3306)/yanxue?charset=utf8&parseTime=True&loc=Local"
+      max_open_conns: 300
+      max_idle_conns: 100
+      path: "migrate/api"
+      from_version: 8
+      to_version: 9
+
+    redis:
+      addr: "127.0.0.1:6379"
+      db: 0
+
+
+# production specific
+production:
+  <<: *default
+
+# staging specific
+staging:
+  <<: *default
+
+# development specific
+development:
+  <<: *default
