@@ -16,6 +16,13 @@ var Cfg *Config
 type Config struct {
 	BaseConfig `yaml:"db"`
 	Stat       `yaml:",inline"`
+
+	JwtSecret string `yaml:"jwt_secret"`
+
+	SMSSecret       string `yaml:"sms_secret"`
+	SMSKey          string `yaml:"sms_key"`
+	SMSTemplateCode string `yaml:"sms_template_code"`
+	SMSSignName     string `yaml:"sms_sign_name"`
 }
 
 type BaseConfig struct {
