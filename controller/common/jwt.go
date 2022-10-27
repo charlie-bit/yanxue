@@ -5,8 +5,8 @@ import (
 	"github.com/charlie-bit/yanxue/config"
 	"github.com/charlie-bit/yanxue/model"
 	"github.com/charlie-bit/yanxue/model/common"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 	"strings"
 )
