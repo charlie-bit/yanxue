@@ -2,10 +2,14 @@
 
 ![Gopher image](https://golang.org/doc/gopher/fiveyears.jpg)
 
+基于gin + gorm 管理平台，部署方便快捷，目前支持的模块如下
+
 ### 用户模块
 
-* 学校管理 
+* 学校管理
 * 用户管理
+    * 结合JWT鉴权方式，用户登录
+    * 手机验证码注册
 * 角色管理
 * 权限管理
 

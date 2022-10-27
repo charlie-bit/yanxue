@@ -7,7 +7,7 @@ GO ?= go
 # make -f ./MakeFile -C . lint
 .PHONY: lint
 lint:
-	golangci-lint run  --skip-dirs testsl
+	golangci-lint run
 
 # make -f ./MakeFile -C . build
 .PHONY: build

@@ -5,9 +5,16 @@ default: &default
   addr: ":8000"
   health_uri: "/health"
 
+  jwt_secret: "dsaMDPAasdwe0992kH"
+
+  sms_secret: ""
+  sms_key: ""
+  sms_template_code: "SMS_154950909" # 模版code
+  sms_sign_name: "阿里云短信测试" # 模版名称
+
   db:
     mysql:
-      dsn: "admin:pass4u@tcp(127.0.0.1:3306)/yanxue?charset=utf8&parseTime=True&loc=Local"
+      dsn: "admin:admin@tcp(127.0.0.1:3306)/yanxue?charset=utf8&parseTime=True&loc=Local"
       max_open_conns: 300
       max_idle_conns: 100
       path: "migrate/api"

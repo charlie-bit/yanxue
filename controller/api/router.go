@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+
+	_ "github.com/charlie-bit/yanxue/docs" // swagger
 )
 
 func Start() {
@@ -40,6 +42,13 @@ func Register(g *gin.Engine) {
 	v1.GET(config.Cfg.HealthURI, func(context *gin.Context) {
 		context.JSON(http.StatusOK, "hello world")
 	})
+
+	userg := g.Group(v1.BasePath() + "/user")
+	userg.GET("/phone_code", user.PhoneCode)
+	userg.POST("/register", user.Register)
+	userg.POST("/login", user.Login)
+	userg.GET("/check_code/:phone", user.GetCheckCode)
+	userg.POST("/verify_check_code", user.VerifyCheckCode)
 }
 
 func Cors() gin.HandlerFunc {
