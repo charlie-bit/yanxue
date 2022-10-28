@@ -26,3 +26,13 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY (account)
 );
 
+CREATE TABLE IF NOT EXISTS roles (
+    id INT UNSIGNED AUTO_INCREMENT,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    role_name varchar(128) NOT NULL,
+    alias varchar(128) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY (role_name)
+    );
+
