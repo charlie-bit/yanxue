@@ -1,27 +1,29 @@
 package common
 
 import (
+	"context"
 	"errors"
 	"github.com/charlie-bit/yanxue/config"
+	"github.com/charlie-bit/yanxue/db"
 	"github.com/charlie-bit/yanxue/model"
 	"github.com/charlie-bit/yanxue/model/common"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 	"strings"
 )
 
-func JwtAuthentication(ctx *gin.Context) bool {
+func JwtAuthentication(ctx *gin.Context) {
 	tokenHeader := ctx.Request.Header.Get("Authorization") //Grab the token from the header
 	if tokenHeader == "" {
-		ctx.JSON(common.Failed(common.ErrAuth, nil))
-		return false
+		ctx.AbortWithStatusJSON(common.Failed(common.ErrAuth, nil))
+		return
 	}
 
 	splitted := strings.Split(tokenHeader, " ") //The token normally comes in format `Bearer {token-body}`, we check if the retrieved token matched this requirement
 	if len(splitted) != 2 {
-		ctx.JSON(common.Failed(common.ErrAuth, nil))
-		return false
+		ctx.AbortWithStatusJSON(common.Failed(common.ErrAuth, nil))
+		return
 	}
 
 	tokenPart := splitted[1] //Grab the token part, what we are truly interested in
@@ -32,14 +34,23 @@ func JwtAuthentication(ctx *gin.Context) bool {
 	})
 
 	if err != nil { //Malformed token, returns with http code 403 as usual
-		return false
+		ctx.AbortWithStatusJSON(common.Failed(common.ErrAuth, err))
+		return
 	}
 
 	if !token.Valid { //Token is invalid, maybe not signed on this server
-		return false
+		ctx.AbortWithStatusJSON(common.Failed(common.ErrAuth, nil))
+		return
 	}
 
-	return true
+	account := ctx.Request.Header.Get("account")
+
+	if tokenPart != db.RedisClient.Get(context.Background(), account).Val() {
+		ctx.AbortWithStatusJSON(common.Failed(common.ErrAuth, nil))
+		return
+	}
+
+	ctx.Next()
 }
 
 func NewJWTToken(account string) (*model.Token, error) {

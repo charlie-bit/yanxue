@@ -84,7 +84,7 @@ func (_User) Login(c *gin.Context) {
 		return
 	}
 
-	if err, ok := param.Validate(); !ok {
+	if err, ok := param.LoginValidate(); !ok {
 		c.JSON(common.Failed(common.ErrParams, err))
 		return
 	}
@@ -112,13 +112,34 @@ func (_User) Login(c *gin.Context) {
 		return
 	}
 
-	if err = db.RedisClient.Set(context.Background(), param.Account, "", time.Hour*1).Err(); err != nil {
+	if err = db.RedisClient.Set(context.Background(), param.Account, token.Token, time.Hour*1).Err(); err != nil {
 		c.JSON(common.Failed(common.ErrParams, err))
 		return
 	}
 
 	var resp render.UserLogin
 	resp.Data = token.Token
+	c.JSON(common.SuccessData(&resp))
+}
+
+// SignOut
+// @Summary 用户退出登录
+// @Security Authorization
+// @Schemes
+// @Description
+// @accept json
+// @Tags User
+// @Param account header string true "当前账号"
+// @Success 200 {object} common.ResponseBase
+// @Router /api/v1/sign_out [get]
+func (_User) SignOut(c *gin.Context) {
+	account := c.Request.Header.Get("account")
+	if err := db.RedisClient.Del(context.Background(), account).Err(); err != nil {
+		c.JSON(common.Failed(common.ErrParams, err))
+		return
+	}
+
+	var resp common.ResponseBase
 	c.JSON(common.SuccessData(&resp))
 }
 

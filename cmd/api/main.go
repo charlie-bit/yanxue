@@ -17,11 +17,14 @@ var (
 	Version = "no version provide"
 )
 
-// @title Mall Blockchain API Service
+// @title YanXue API Service
 // @version 1.0
 // @Produce json
 // @contact.name API Support
 // @license.name Apache 2.0
+// @securityDefinitions.apikey Authorization
+// @in header
+// @name Authorization
 func main() {
 	var (
 		configFile  string

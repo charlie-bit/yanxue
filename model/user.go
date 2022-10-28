@@ -20,6 +20,10 @@ func (u *User) GetByAccount() error {
 	return db.MysqlClient.Table(u.TableName()).Where("account = ? ", u.Account).Find(&u).Error
 }
 
+func (u *User) GetByID(id uint) error {
+	return db.MysqlClient.Table(u.TableName()).Where("id = ? ", id).Find(&u).Error
+}
+
 func (u *User) Create() error {
 	return db.MysqlClient.Table(u.TableName()).Create(&u).Error
 }

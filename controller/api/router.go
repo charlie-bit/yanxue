@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/charlie-bit/yanxue/config"
+	base "github.com/charlie-bit/yanxue/controller/common"
 	"github.com/charlie-bit/yanxue/pkg/constant"
 	"net/http"
 
@@ -43,12 +44,26 @@ func Register(g *gin.Engine) {
 		context.JSON(http.StatusOK, "hello world")
 	})
 
-	userg := g.Group(v1.BasePath() + "/user")
-	userg.GET("/phone_code", user.PhoneCode)
-	userg.POST("/register", user.Register)
-	userg.POST("/login", user.Login)
-	userg.GET("/check_code/:phone", user.GetCheckCode)
-	userg.POST("/verify_check_code", user.VerifyCheckCode)
+	v1.GET("/phone_code", user.PhoneCode)
+	v1.POST("/register", user.Register)
+	v1.POST("/login", user.Login)
+	v1.GET("/check_code/:phone", user.GetCheckCode)
+	v1.POST("/verify_check_code", user.VerifyCheckCode)
+	v1.GET("/sign_out", base.JwtAuthentication, user.SignOut)
+
+	rc := g.Group(v1.BasePath() + "/role")
+	rc.Use(base.JwtAuthentication)
+	rc.POST("/new", role.New)
+	rc.GET("/:id", role.GetByID)
+	rc.DELETE("/:id", role.Del)
+	rc.GET("/list", role.List)
+	rc.PUT("/:id", role.Update)
+
+	relc := g.Group(v1.BasePath() + "/relation")
+	relc.Use(base.JwtAuthentication)
+	relc.POST("/new", relation.Create)
+	relc.GET("/:user_id", relation.GetUID)
+	relc.GET("/list", relation.List)
 }
 
 func Cors() gin.HandlerFunc {
