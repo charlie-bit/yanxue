@@ -58,6 +58,12 @@ func Register(g *gin.Engine) {
 	rc.DELETE("/:id", role.Del)
 	rc.GET("/list", role.List)
 	rc.PUT("/:id", role.Update)
+
+	relc := g.Group(v1.BasePath() + "/relation")
+	relc.Use(base.JwtAuthentication)
+	relc.POST("/new", relation.Create)
+	relc.GET("/:user_id", relation.GetUID)
+	relc.GET("/list", relation.List)
 }
 
 func Cors() gin.HandlerFunc {
