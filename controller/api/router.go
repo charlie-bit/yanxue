@@ -64,6 +64,19 @@ func Register(g *gin.Engine) {
 	relc.POST("/new", relation.Create)
 	relc.GET("/:user_id", relation.GetUID)
 	relc.GET("/list", relation.List)
+
+	resoc := g.Group(v1.BasePath() + "/resource")
+	resoc.Use(base.JwtAuthentication)
+	resoc.POST("/new", resource.New)
+	resoc.PUT("/:id", resource.Update)
+	resoc.GET("/list", resource.List)
+	resoc.DELETE("/:id", resource.Del)
+
+	uresoc := g.Group(v1.BasePath() + "/user_resource")
+	uresoc.Use(base.JwtAuthentication)
+	uresoc.POST("/new", uresource.New)
+	uresoc.DELETE("/del", uresource.Del)
+	uresoc.GET("/:role_id", uresource.GetByUID)
 }
 
 func Cors() gin.HandlerFunc {
