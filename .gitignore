@@ -17,3 +17,9 @@
 docs
 
 bin
+
+.idea
+
+.DS_Store
+
+LICENSE
